@@ -19,7 +19,15 @@ export function initConfig(config: ConfigState) {
     };
 }
 
-export function initSession({ token, conversationSid }: { token: string; conversationSid: string }) {
+export function initSession({
+    token,
+    conversationSid,
+    identity
+}: {
+    token: string;
+    conversationSid: string;
+    identity: string;
+}) {
     return async (dispatch: Dispatch) => {
         let conversationsClient: Client;
         let conversation;
@@ -37,13 +45,11 @@ export function initSession({ token, conversationSid }: { token: string; convers
                 return;
             }
 
-            // (await conversation.getParticipantBySid('')).updateAttributes({})
-
             participants = await conversation.getParticipants();
-            console.log("@@@ participants", participants);
             users = await Promise.all(participants.map(async (p) => p.getUser()));
-            console.log("@@@ users", users);
             messages = (await conversation.getMessages(MESSAGES_LOAD_COUNT)).items;
+            const me = await conversationsClient.getUser(identity);
+            await me.updateAttributes({ publicKey: "public-key-value" }); // TODO
         } catch (e) {
             log.error("Something went wrong when initializing session", e);
             throw e;

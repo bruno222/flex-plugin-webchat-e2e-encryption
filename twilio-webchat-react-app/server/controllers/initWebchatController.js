@@ -15,8 +15,7 @@ const contactWebchatOrchestrator = async (request, customerFriendlyName) => {
         "PreEngagementData",
         JSON.stringify({
             ...request.body?.formData,
-            friendlyName: customerFriendlyName,
-            publicKey: "public-key-goes-here" // TODO
+            friendlyName: customerFriendlyName
         })
     );
 
@@ -30,7 +29,6 @@ const contactWebchatOrchestrator = async (request, customerFriendlyName) => {
                 password: process.env.AUTH_TOKEN
             }
         });
-        console.log("@@@ res.data", res.data);
         ({ identity, conversation_sid: conversationSid } = res.data);
     } catch (e) {
         logInterimAction("Something went wrong during the orchestration:", e.response?.data?.message);
@@ -107,6 +105,7 @@ const initWebchatController = async (request, response) => {
     }
 
     response.send({
+        identity,
         token,
         conversationSid,
         expiration: Date.now() + TOKEN_TTL_IN_SECONDS * 1000
