@@ -66,6 +66,7 @@ export const MessageInput = () => {
             formData.append(file.name, file);
             preparedMessage.addMedia(formData);
         });
+        preparedMessage.setAttributes({ nonce: "blah123" }); // TODO
         await preparedMessage.build().send();
         setText("");
         dispatch(detachFiles(attachedFiles));
