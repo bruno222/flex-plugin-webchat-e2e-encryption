@@ -37,8 +37,12 @@ export function initSession({ token, conversationSid }: { token: string; convers
                 return;
             }
 
+            // (await conversation.getParticipantBySid('')).updateAttributes({})
+
             participants = await conversation.getParticipants();
+            console.log("@@@ participants", participants);
             users = await Promise.all(participants.map(async (p) => p.getUser()));
+            console.log("@@@ users", users);
             messages = (await conversation.getMessages(MESSAGES_LOAD_COUNT)).items;
         } catch (e) {
             log.error("Something went wrong when initializing session", e);
