@@ -18,7 +18,9 @@ export function WebchatWidget() {
         const data = sessionDataHandler.tryResumeExistingSession();
         if (data) {
             try {
-                dispatch(initSession({ token: data.token, conversationSid: data.conversationSid }));
+                dispatch(
+                    initSession({ token: data.token, conversationSid: data.conversationSid, identity: data.identity })
+                );
             } catch (e) {
                 // if initSession fails, go to changeEngagement phase - most likely there's something wrong with the store token or conversation sis
                 dispatch(changeEngagementPhase({ phase: EngagementPhase.PreEngagementForm }));
