@@ -1,0 +1,9 @@
+Flex Plugin side:
+
+    How to read the message.attributes.nonce:
+    
+        Chrome Console, execute:
+            window.Twilio.Flex.Manager.getInstance().store.getState().flex.chat.conversations
+    
+        More info:
+            https://github.com/trogers-twilio/plugin-new-message-notification/blob/master/src/components/NewMessageNotification.js
