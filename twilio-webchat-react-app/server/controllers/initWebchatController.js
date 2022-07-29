@@ -6,6 +6,7 @@ const { logFinalAction, logInitialAction, logInterimAction } = require("../helpe
 
 const contactWebchatOrchestrator = async (request, customerFriendlyName) => {
     logInterimAction("Calling Webchat Orchestrator");
+    const { customerPublicKey, formData } = request.body;
 
     const params = new URLSearchParams();
     params.append("AddressSid", process.env.ADDRESS_SID);
@@ -14,7 +15,7 @@ const contactWebchatOrchestrator = async (request, customerFriendlyName) => {
     params.append(
         "PreEngagementData",
         JSON.stringify({
-            ...request.body?.formData,
+            ...formData,
             friendlyName: customerFriendlyName
         })
     );
@@ -31,7 +32,7 @@ const contactWebchatOrchestrator = async (request, customerFriendlyName) => {
         });
         ({ identity, conversation_sid: conversationSid } = res.data);
 
-        await setPublicKey(conversationSid, "public-key-goes-here"); // TODO
+        await setPublicKey(conversationSid, customerPublicKey);
     } catch (e) {
         logInterimAction("Something went wrong during the orchestration:", e.response?.data?.message);
         throw e.response.data;

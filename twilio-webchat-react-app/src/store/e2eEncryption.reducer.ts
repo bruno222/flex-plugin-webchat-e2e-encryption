@@ -11,8 +11,6 @@ export const e2eEncryptionReducer: Reducer = (
 ): E2eEncryptionState => {
     switch (action.type) {
         case ACTION_ADD_AGENT_PUBLIC_KEY: {
-            console.log("@@@ ACTION_ADD_AGENT_PUBLIC_KEY state", state);
-            console.log("@@@ ACTION_ADD_AGENT_PUBLIC_KEY action", action);
             return {
                 ...state,
                 agentPublicKey: action.payload

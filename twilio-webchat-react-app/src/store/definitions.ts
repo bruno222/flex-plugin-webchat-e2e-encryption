@@ -37,7 +37,6 @@ export type SessionState = {
 };
 
 export type E2eEncryptionState = {
-    customerPublicKey?: string;
     agentPublicKey?: string;
 };
 

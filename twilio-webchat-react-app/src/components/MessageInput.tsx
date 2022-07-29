@@ -13,6 +13,7 @@ import { AttachFileButton } from "./AttachFileButton";
 import { FilePreview } from "./FilePreview";
 import { detachFiles } from "../store/actions/genericActions";
 import { CHAR_LIMIT } from "../constants";
+
 import {
     formStyles,
     innerInputStyles,
@@ -20,15 +21,17 @@ import {
     filePreviewContainerStyles,
     textAreaContainerStyles
 } from "./styles/MessageInput.styles";
+import { encrypt } from "../helpers/nacl";
 
 export const MessageInput = () => {
     const dispatch = useDispatch();
     const [text, setText] = useState("");
     const [isSending, setIsSending] = useState(false);
-    const { conversation, attachedFiles, fileAttachmentConfig } = useSelector((state: AppState) => ({
+    const { conversation, attachedFiles, fileAttachmentConfig, canSendMessages } = useSelector((state: AppState) => ({
         conversation: state.chat.conversation,
         attachedFiles: state.chat.attachedFiles || [],
-        fileAttachmentConfig: state.config.fileAttachment
+        fileAttachmentConfig: state.config.fileAttachment,
+        canSendMessages: Boolean(state.e2eEncryption.agentPublicKey)
     }));
     const oldAttachmentsLength = useRef((attachedFiles || []).length);
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -60,11 +63,12 @@ export const MessageInput = () => {
         setIsSending(true);
 
         let preparedMessage = conversation.prepareMessage();
-        preparedMessage = preparedMessage.setBody(text);
+        const encryptedText = encrypt(text);
+        preparedMessage = preparedMessage.setBody(encryptedText);
         attachedFiles.forEach((file: File) => {
             const formData = new FormData();
             formData.append(file.name, file);
-            preparedMessage.addMedia(formData);
+            preparedMessage.addMedia(formData); // TODO: encrypt files
         });
         await preparedMessage.build().send();
         setText("");
@@ -123,6 +127,7 @@ export const MessageInput = () => {
                 <Box as="div" {...innerInputStyles}>
                     <Box {...textAreaContainerStyles}>
                         <TextArea
+                            disabled={!canSendMessages}
                             ref={textAreaRef}
                             data-test="message-input-textarea"
                             placeholder="Type your message"
