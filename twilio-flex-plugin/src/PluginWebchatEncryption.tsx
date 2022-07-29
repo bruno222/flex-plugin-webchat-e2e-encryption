@@ -4,9 +4,9 @@ import { FlexPlugin } from '@twilio/flex-plugin';
 
 import CustomTaskList from './components/CustomTaskList/CustomTaskList';
 
-const PLUGIN_NAME = 'FlexPlugin';
+const PLUGIN_NAME = 'plugin-webchat-e2e-encryption';
 
-export default class FlexPlugin extends FlexPlugin {
+export default class PluginWebchatEncryption extends FlexPlugin {
   constructor() {
     super(PLUGIN_NAME);
   }

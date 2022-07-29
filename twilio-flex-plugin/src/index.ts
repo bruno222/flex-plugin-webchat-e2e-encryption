@@ -1,5 +1,5 @@
 import * as FlexPlugin from '@twilio/flex-plugin';
 
-import FlexPlugin from './FlexPlugin';
+import PluginWebchatEncryption from './PluginWebchatEncryption';
 
-FlexPlugin.loadPlugin(FlexPlugin);
+FlexPlugin.loadPlugin(PluginWebchatEncryption);
