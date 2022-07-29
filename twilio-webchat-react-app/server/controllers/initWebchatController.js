@@ -30,6 +30,8 @@ const contactWebchatOrchestrator = async (request, customerFriendlyName) => {
             }
         });
         ({ identity, conversation_sid: conversationSid } = res.data);
+
+        await setPublicKey(conversationSid, "public-key-goes-here"); // TODO
     } catch (e) {
         logInterimAction("Something went wrong during the orchestration:", e.response?.data?.message);
         throw e.response.data;
@@ -41,6 +43,16 @@ const contactWebchatOrchestrator = async (request, customerFriendlyName) => {
         conversationSid,
         identity
     };
+};
+
+const setPublicKey = async (conversationSid, customerPublicKey) => {
+    console.log("conversationSid", conversationSid);
+    const { attributes } = await getTwilioClient().conversations.conversations(conversationSid).fetch();
+    await getTwilioClient()
+        .conversations.conversations(conversationSid)
+        .update({
+            attributes: JSON.stringify({ ...JSON.parse(attributes), customerPublicKey })
+        });
 };
 
 const sendUserMessage = (conversationSid, identity, messageBody) => {
