@@ -43,13 +43,16 @@ const isFirstOfDateGroup = (message: Message, i: number, messages: Message[]) =>
 };
 
 export const MessageList = () => {
-    const { messages, participants, users, conversation, conversationsClient } = useSelector((state: AppState) => ({
-        messages: state.chat.messages,
-        participants: state.chat.participants,
-        users: state.chat.users,
-        conversation: state.chat.conversation,
-        conversationsClient: state.chat.conversationsClient
-    }));
+    const { messages, participants, users, conversation, conversationsClient, agentPublicKey } = useSelector(
+        (state: AppState) => ({
+            messages: state.chat.messages,
+            participants: state.chat.participants,
+            users: state.chat.users,
+            conversation: state.chat.conversation,
+            conversationsClient: state.chat.conversationsClient,
+            agentPublicKey: state.e2eEncryption.agentPublicKey
+        })
+    );
     const dispatch = useDispatch();
     const messageListRef = useRef<HTMLDivElement>(null);
     const isLoadingMessages = useRef(false);
@@ -58,7 +61,10 @@ export const MessageList = () => {
     const [focusIndex, setFocusIndex] = useState(
         messages && messages.length ? messages[messages?.length - 1].index : -1
     );
+    // const [encryptionSeparatorWasSent, setEncryptionSeparator] = useState(false);
     const [shouldFocusLatest, setShouldFocusLatest] = useState(false);
+
+    // console.log("aaa1", encryptionSeparatorWasSent, agentPublicKey);
 
     const updateFocus = (newFocus: number) => {
         if (newFocus < 0 || !messages || !messages.length || newFocus > messages[messages.length - 1].index) {
@@ -156,7 +162,6 @@ export const MessageList = () => {
         if (isFirstUnreadMessage && !belongsToCurrentUser) {
             return <MessageListSeparator message={message} separatorType="new" />;
         }
-
         return null;
     };
 
@@ -209,6 +214,7 @@ export const MessageList = () => {
                 <Box data-test="all-message-bubbles" key={message.index}>
                     {renderSeparatorIfApplicable(message, i)}
                     <MessageBubble
+                        agentPublicKey={agentPublicKey}
                         message={message}
                         isLast={i === messages.length - 1}
                         isLastOfUserGroup={isLastOfUserGroup(message, i, messages)}

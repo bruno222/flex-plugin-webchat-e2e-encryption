@@ -36,6 +36,11 @@ export type SessionState = {
     preEngagementData?: PreEngagementData;
 };
 
+export type E2eEncryptionState = {
+    customerPublicKey?: string;
+    agentPublicKey?: string;
+};
+
 export type ConfigState = {
     serverUrl?: string;
     theme?: {
@@ -61,4 +66,5 @@ export type AppState = {
     config: ConfigState;
     session: SessionState;
     notifications: NotificationState;
+    e2eEncryption: E2eEncryptionState;
 };

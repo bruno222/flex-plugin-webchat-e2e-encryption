@@ -29,13 +29,15 @@ export const MessageBubble = ({
     isLast,
     isLastOfUserGroup,
     focusable,
-    updateFocus
+    updateFocus,
+    agentPublicKey
 }: {
     message: Message;
     isLast: boolean;
     isLastOfUserGroup: boolean;
     focusable: boolean;
     updateFocus: (newFocus: number) => void;
+    agentPublicKey?: string;
 }) => {
     const [read, setRead] = useState(false);
     const [isMouseDown, setIsMouseDown] = useState(false);
@@ -147,7 +149,10 @@ export const MessageBubble = ({
                     </Flex>
                     <Text as="p" {...bodyStyles}>
                         {message.body ? parseMessageBody(message.body, belongsToCurrentUser) : null}
+                        <br />
+                        agentPublicKey: {agentPublicKey}
                     </Text>
+
                     {message.type === "media" ? renderMedia() : null}
                 </Box>
             </Box>

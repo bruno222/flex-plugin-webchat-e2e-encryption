@@ -14,10 +14,19 @@ export const MessageListSeparator = ({
     message,
     separatorType
 }: {
-    message: Message;
+    message?: Message;
     separatorType: SeparatorType;
 }) => {
     const getSeparatorText = () => {
+        if (separatorType === "e2e") {
+            console.log("aaa3 ok");
+            return "messages are now e2e encrypted!";
+        }
+
+        if (!message) {
+            return null;
+        }
+
         let separatorText;
         if (separatorType === "new") {
             separatorText = "New";
