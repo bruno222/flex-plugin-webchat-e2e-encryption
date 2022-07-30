@@ -27,11 +27,10 @@ export const MessageInput = () => {
     const dispatch = useDispatch();
     const [text, setText] = useState("");
     const [isSending, setIsSending] = useState(false);
-    const { conversation, attachedFiles, fileAttachmentConfig, canSendMessages } = useSelector((state: AppState) => ({
+    const { conversation, attachedFiles, fileAttachmentConfig } = useSelector((state: AppState) => ({
         conversation: state.chat.conversation,
         attachedFiles: state.chat.attachedFiles || [],
-        fileAttachmentConfig: state.config.fileAttachment,
-        canSendMessages: Boolean(state.e2eEncryption.agentPublicKey)
+        fileAttachmentConfig: state.config.fileAttachment
     }));
     const oldAttachmentsLength = useRef((attachedFiles || []).length);
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -127,7 +126,6 @@ export const MessageInput = () => {
                 <Box as="div" {...innerInputStyles}>
                     <Box {...textAreaContainerStyles}>
                         <TextArea
-                            disabled={!canSendMessages}
                             ref={textAreaRef}
                             data-test="message-input-textarea"
                             placeholder="Type your message"

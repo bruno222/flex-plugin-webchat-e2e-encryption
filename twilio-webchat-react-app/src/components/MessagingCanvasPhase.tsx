@@ -10,10 +10,14 @@ import { NotificationBar } from "./NotificationBar";
 import { removeNotification, updatePreEngagementData } from "../store/actions/genericActions";
 import { notifications } from "../notifications";
 import { AttachFileDropArea } from "./AttachFileDropArea";
+import { WaitForAgentEncryption } from "./WaitForAgentEncryption";
 
 export const MessagingCanvasPhase = () => {
     const dispatch = useDispatch();
-    const conversationState = useSelector((state: AppState) => state.chat.conversationState);
+    const { conversationState, encryptionHandshakeDone } = useSelector((state: AppState) => ({
+        conversationState: state.chat.conversationState,
+        encryptionHandshakeDone: Boolean(state.e2eEncryption.agentPublicKey)
+    }));
 
     useEffect(() => {
         dispatch(updatePreEngagementData({ email: "", name: "", query: "" }));
@@ -22,12 +26,24 @@ export const MessagingCanvasPhase = () => {
 
     const Wrapper = conversationState === "active" ? AttachFileDropArea : Fragment;
 
+    const loadBottom = () => {
+        if (!encryptionHandshakeDone) {
+            return <WaitForAgentEncryption />;
+        }
+
+        if (conversationState === "active") {
+            return <MessageInput />;
+        }
+
+        return <ConversationEnded />;
+    };
+
     return (
         <Wrapper>
             <Header />
             <NotificationBar />
-            <MessageList />
-            {conversationState === "active" ? <MessageInput /> : <ConversationEnded />}
+            {encryptionHandshakeDone ? <MessageList /> : null}
+            {loadBottom()}
         </Wrapper>
     );
 };
