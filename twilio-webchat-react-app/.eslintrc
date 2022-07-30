@@ -41,6 +41,9 @@
     "import/no-unused-modules": [1, {"unusedExports": true}],
     "import/no-duplicates": ["error"],
     "spaced-comment": "warn",
+    "no-unused-expressions": "warn",
+    "@typescript-eslint/member-ordering": "warn",
+    "lines-between-class-members": "warn",
     "sonarjs/prefer-immediate-return": "off",
     "prefer-named-capture-group": "off"
   }
