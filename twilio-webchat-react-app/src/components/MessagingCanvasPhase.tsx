@@ -1,4 +1,4 @@
-import { useEffect, Fragment } from "react";
+import React, { useEffect, Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Header } from "./Header";
@@ -27,22 +27,31 @@ export const MessagingCanvasPhase = () => {
     const Wrapper = conversationState === "active" ? AttachFileDropArea : Fragment;
 
     const loadBottom = () => {
-        if (!encryptionHandshakeDone) {
+        if (!encryptionHandshakeDone && conversationState === "active") {
             return <WaitForAgentEncryption />;
         }
 
         if (conversationState === "active") {
-            return <MessageInput />;
+            return (
+                <React.Fragment>
+                    <MessageList />
+                    <MessageInput />
+                </React.Fragment>
+            );
         }
 
-        return <ConversationEnded />;
+        return (
+            <React.Fragment>
+                <MessageList />
+                <ConversationEnded />
+            </React.Fragment>
+        );
     };
 
     return (
         <Wrapper>
             <Header />
             <NotificationBar />
-            {encryptionHandshakeDone ? <MessageList /> : null}
             {loadBottom()}
         </Wrapper>
     );
