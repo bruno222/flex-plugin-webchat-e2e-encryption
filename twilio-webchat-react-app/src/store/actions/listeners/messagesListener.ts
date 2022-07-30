@@ -1,6 +1,6 @@
 import { Conversation, Message } from "@twilio/conversations";
 import { Dispatch } from "redux";
-import { decrypt } from "../../../helpers/nacl";
+import { encrypt } from "../../../helpers/naclForWebsite";
 
 import { ACTION_ADD_MESSAGE, ACTION_REMOVE_MESSAGE, ACTION_UPDATE_MESSAGE } from "../actionTypes";
 
@@ -10,7 +10,7 @@ export interface MessageDecrypted extends Message {
 
 export const initMessagesListener = (conversation: Conversation, dispatch: Dispatch) => {
     conversation.addListener("messageAdded", (message: MessageDecrypted) => {
-        message.bodyDecrypted = message.body ? decrypt(message.body) : message.body;
+        message.bodyDecrypted = message.body ? encrypt.decrypt(message.body) : message.body;
 
         dispatch({
             type: ACTION_ADD_MESSAGE,
