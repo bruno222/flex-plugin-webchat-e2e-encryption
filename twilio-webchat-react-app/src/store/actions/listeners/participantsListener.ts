@@ -1,6 +1,6 @@
 import { Conversation, Participant } from "@twilio/conversations";
 import { Dispatch } from "redux";
-import { init } from "../../../helpers/nacl";
+import { encrypt } from "../../../helpers/naclForWebsite";
 
 import {
     ACTION_ADD_AGENT_PUBLIC_KEY,
@@ -24,7 +24,7 @@ export const initParticipantsListener = (conversation: Conversation, dispatch: D
             return;
         }
 
-        init(agentPublicKey);
+        encrypt.init(agentPublicKey);
 
         dispatch({
             type: ACTION_ADD_AGENT_PUBLIC_KEY,

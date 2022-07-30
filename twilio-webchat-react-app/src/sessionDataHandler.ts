@@ -1,7 +1,7 @@
 import log from "loglevel";
 
 import { Token } from "./definitions";
-import { myPublicKey } from "./helpers/nacl";
+import { encrypt } from "./helpers/naclForWebsite";
 
 const LOCAL_STORAGE_ITEM_ID = "TWILIO_WEBCHAT_WIDGET";
 
@@ -108,7 +108,7 @@ export const sessionDataHandler = {
         let newTokenData;
 
         try {
-            const customerPublicKey = myPublicKey();
+            const customerPublicKey = encrypt.myPublicKey();
             newTokenData = await contactBackend<Token>("/initWebchat", { formData, customerPublicKey });
         } catch (e) {
             throw Error("No results from server");

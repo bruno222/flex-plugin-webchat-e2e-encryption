@@ -21,7 +21,7 @@ import {
     filePreviewContainerStyles,
     textAreaContainerStyles
 } from "./styles/MessageInput.styles";
-import { encrypt } from "../helpers/nacl";
+import { encrypt } from "../helpers/naclForWebsite";
 
 export const MessageInput = () => {
     const dispatch = useDispatch();
@@ -62,7 +62,7 @@ export const MessageInput = () => {
         setIsSending(true);
 
         let preparedMessage = conversation.prepareMessage();
-        const encryptedText = encrypt(text);
+        const encryptedText = encrypt.encrypt(text);
         preparedMessage = preparedMessage.setBody(encryptedText);
         attachedFiles.forEach((file: File) => {
             const formData = new FormData();
