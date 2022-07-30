@@ -1,1 +1,1 @@
-export type SeparatorType = "date" | "new" | "e2e";
+export type SeparatorType = "date" | "new";

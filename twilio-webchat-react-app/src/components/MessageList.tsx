@@ -55,11 +55,9 @@ export const MessageList = () => {
     const isLoadingMessages = useRef(false);
     const oldMessagesLength = useRef((messages || []).length);
     const [hasLoadedAllMessages, setHasLoadedAllMessages] = useState(true);
-    console.log("messages@@@", messages);
     const [focusIndex, setFocusIndex] = useState(
         messages && messages.length ? messages[messages?.length - 1].index : -1
     );
-    // const [encryptionSeparatorWasSent, setEncryptionSeparator] = useState(false);
     const [shouldFocusLatest, setShouldFocusLatest] = useState(false);
 
     const updateFocus = (newFocus: number) => {
